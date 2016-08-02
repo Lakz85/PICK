@@ -3,6 +3,7 @@ package com.pick;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,36 +22,45 @@ public class ApplicantFragment extends android.support.v4.app.Fragment {
     public static int increment;
     static MainActivity owner;
     static Bundle bundle;
+    static int type=0;
 
     public ApplicantFragment() {
     }
+
+
 
     public static ApplicantFragment newInstance(int initValue) {
         ApplicantFragment fragment = new ApplicantFragment();
         bundle = new Bundle();
         bundle.putInt("value", initValue);
+        ApplicantFragment.type = initValue;
         fragment.setArguments(bundle);
         return fragment;
     }
 
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.main_video_list, container, false);
         Bundle initBundle = getArguments();
-        increment += initBundle.getInt("value");
-        owner = (MainActivity) getActivity();
+        //타입구분용으로 썼기때문에 중가량에 차이가 생겨 삼항연산문으로 조건을 줌으로써 증가량에 차이가 없도록 함
+        int temp = initBundle.getInt("value");
+        increment += (temp==0?temp+1:temp);
+        owner = (MainActivity) getActivity();//
         rv.setLayoutManager(new LinearLayoutManager(PickApplication.getItemContext()));
-        rv.setAdapter(new GirlsGroupRecyclerViewAdpater(PickApplication.getItemContext()));
+        rv.setAdapter(new RecyclerViewAdpater(PickApplication.getItemContext()));
         return rv;
     }
 
-    public static class GirlsGroupRecyclerViewAdpater extends RecyclerView.Adapter<GirlsGroupRecyclerViewAdpater.ViewHolder> {
+
+    public static class RecyclerViewAdpater extends RecyclerView.Adapter<RecyclerViewAdpater.ViewHolder> {
         private ArrayList<Integer> girlsImages;
 
-        public GirlsGroupRecyclerViewAdpater(Context itemContext) {
+        public RecyclerViewAdpater(Context itemContext) {
         }
 
-       /* public GirlsGroupRecyclerViewAdpater(Context context, ArrayList<Integer> resources) {
+       /* public RecyclerViewAdpater(Context context, ArrayList<Integer> resources) {
             girlsImages = resources;
         }*/
 
@@ -97,10 +107,18 @@ public class ApplicantFragment extends android.support.v4.app.Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_video_main_fragment, parent, false);
-            return new ViewHolder(view);
+            View view;
+            switch (type) {
+                /* 보는 방식 변하게 하기 위해 구분 */
+                case 0:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_video_main_fragment, parent, false);
+                    return new ViewHolder(view);
+                case 1:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_list_main_fragment, parent, false);
+                    return new ViewHolder(view);
+            }
+            return null;
         }
-
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:layout_margin="0dp"
+    android:orientation="horizontal"
+    android:padding="0dp"
+    android:background="#fff">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:paddingBottom="7dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="7dp"
+        android:gravity="center_vertical|center_horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/message_profile_image"
+            android:layout_width="80dp"
+            android:layout_height="55dp"
+            android:transitionName="@string/app_name"
+            android:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:padding="0dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="false"
+            android:layout_toLeftOf="@+id/book_mark_button"
+            android:orientation="vertical"
+            android:paddingBottom="7dp"
+            android:paddingLeft="14dp"
+            android:paddingTop="7dp"
+            android:weightSum="1"
+            android:gravity="center_vertical">
+
+
+            <TextView
+                android:id="@+id/message_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="0.33"
+                android:gravity="center_vertical|center_horizontal"
+                android:singleLine="false"
+                android:text="이름"
+                android:textColor="#000"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/message_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="0.33"
+                android:gravity="center_vertical|center_horizontal"
+                android:singleLine="false"
+                android:text="메세지내용 메세지내용 메세지 내용"
+                android:textColor="#000"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <com.github.ivbaranov.mfb.MaterialFavoriteButton
+            android:id="@+id/book_mark_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center|right"
+            android:padding="0dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -2,9 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:title=""
+            android:checkable="false"
+            android:enabled="false"/>
+        <item
             android:id="@+id/news_feed"
             android:icon="@drawable/ic_web_black_24dp"
-            android:title="뉴스피드" />
+            android:title="공연정보" />
         <item
             android:id="@+id/apply_list"
             android:icon="@drawable/ic_playlist_add_check_black_24dp"

@@ -21,6 +21,7 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
     public static int increment;
     static MainActivity owner;
     static Bundle bundle;
+    static int type=0;
 
     public HelpWantedFragment() {
     }
@@ -29,6 +30,7 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
         HelpWantedFragment fragment = new HelpWantedFragment();
         bundle = new Bundle();
         bundle.putInt("value", initValue);
+        HelpWantedFragment.type = initValue;
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -37,20 +39,23 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.main_video_list, container, false);
         Bundle initBundle = getArguments();
-        increment += initBundle.getInt("value");
+        //타입구분용으로 썼기때문에 중가량에 차이가 생겨 삼항연산문으로 조건을 줌으로써 증가량에 차이가 없도록 함
+        int temp = initBundle.getInt("value");
+        increment += (temp==0?temp+1:temp);
+
         owner = (MainActivity) getActivity();
         rv.setLayoutManager(new LinearLayoutManager(PickApplication.getItemContext()));
-        rv.setAdapter(new GirlsGroupRecyclerViewAdpater(PickApplication.getItemContext()));
+        rv.setAdapter(new RecyclerViewAdpater(PickApplication.getItemContext()));
         return rv;
     }
 
-    public static class GirlsGroupRecyclerViewAdpater extends RecyclerView.Adapter<GirlsGroupRecyclerViewAdpater.ViewHolder> {
+    public static class RecyclerViewAdpater extends RecyclerView.Adapter<RecyclerViewAdpater.ViewHolder> {
         private ArrayList<Integer> girlsImages;
 
-        public GirlsGroupRecyclerViewAdpater(Context itemContext) {
+        public RecyclerViewAdpater(Context itemContext) {
         }
 
-       /* public GirlsGroupRecyclerViewAdpater(Context context, ArrayList<Integer> resources) {
+       /* public RecyclerViewAdpater(Context context, ArrayList<Integer> resources) {
             girlsImages = resources;
         }*/
 
@@ -75,7 +80,7 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
 
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
+            public View mView;
             public final SurfaceView mVideo;
             public final TextView mType;
             public final TextView mBandName;
@@ -91,14 +96,23 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
                 mPart = (TextView) view.findViewById(R.id.item_part);
                 mLocation = (TextView) view.findViewById(R.id.item_location);
             }
+
+
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_video_main_fragment, parent, false);
-            return new ViewHolder(view);
+            View view;
+            switch (type) {
+                case 0:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_video_main_fragment, parent, false);
+                    return new ViewHolder(view);
+                case 1:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_list_main_fragment, parent, false);
+                    return new ViewHolder(view);
+            }
+            return null;
         }
-
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -110,14 +124,13 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(PickApplication.getItemContext(), ItemDetailActivity.class);
+                    Intent intent = new Intent(v.getContext(), ItemDetailActivity.class);
                     //intent.putExtra("memberImage", girlsImages.get(position));
                     intent.putExtra("Type", holder.mType.getText().toString());
                     intent.putExtra("BandName", holder.mBandName.getText().toString());
                     intent.putExtra("Part", holder.mPart.getText().toString());
                     intent.putExtra("Location", holder.mLocation.getText().toString());
-
-                    // ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(owner, holder.girlsImage, ViewCompat.getTransitionName(holder.girlsImage));
+                    //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(owner, holder.girlsImage, ViewCompat.getTransitionName(holder.girlsImage));
                     //ActivityCompat.startActivity(owner, intent, options.toBundle());
                     ActivityCompat.startActivity(owner, intent, bundle);
                 }

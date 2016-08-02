@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="16dp">
+
+    <LinearLayout
+        android:id="@+id/help_wanted_detail_map_linear_layout"
+        android:layout_width="315dp"
+        android:layout_height="473dp"
+        android:background="@drawable/maincard">
+
+        <LinearLayout
+            style="@style/Widget.CardContent"
+            android:layout_width="315dp"
+            android:layout_height="473dp"
+            android:paddingTop="38dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/videoView"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="4dp">
+
+                <ImageView
+                    android:layout_width="275dp"
+                    android:layout_height="206dp"
+                    android:background="#999" />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:paddingLeft="14dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="5dp"
+                android:layout_marginBottom="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="구인파트 : 기타"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="장르 : 락"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="팀 구성 : 기타 1 베이스 1 드럼 1 보컬 1"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Large Text"
+                    android:id="@+id/textView"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.github.clans.fab.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        fab:fab_showAnimation="@anim/show_from_bottom"
+        fab:fab_hideAnimation="@anim/hide_to_bottom"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_myplaces"
+        app:layout_anchor="@id/videoView"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_gravity="center_vertical" />
+
+</android.support.design.widget.CoordinatorLayout>

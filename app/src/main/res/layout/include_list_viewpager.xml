@@ -14,7 +14,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="56dp"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -22,49 +22,92 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
             app:tabMinWidth="90dp"
             app:tabMode="fixed" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|right|center_horizontal"
             android:background="#fff"
+            android:gravity="center_vertical|right|center_horizontal"
             android:padding="5dp">
 
             <Button
                 android:id="@+id/view_video_list"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_view_agenda_black_24dp" />
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/ic_view_agenda_black_24dp"
+                android:onClick="viewVideo" />
+
             <Button
                 android:id="@+id/view_block_list"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/ic_view_list_black_24dp" />
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/ic_view_list_black_24dp"
+                android:onClick="viewList" />
+
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-    <com.pick.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="#fff" />
+        android:background="#fff"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/activity_margin"
+        android:src="@drawable/ic_add_black_24dp"
+        app:backgroundTint="#f0f0f0"
+        app:layout_behavior="com.pick.Scrolling_Floating_Action_Button.FAB_Float_on_Scroll"
+        app:borderWidth="0dp"
+        app:elevation="6dp"></android.support.design.widget.FloatingActionButton>
+
+    <include layout="@layout/inner_fab_layout" />-->
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/activity_margin"
-        android:src="@drawable/ic_add_black_24dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        fab:menu_animationDelayPerItem="55"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="#da3c2f"
+        fab:menu_colorPressed="#dc4b3f"
+        fab:menu_colorRipple="#99d4d4d4"
+        fab:menu_icon="@drawable/fab_add">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/material_design_floating_action_menu_item1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_compass"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            fab:fab_label="개인 글쓰기"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/material_design_floating_action_menu_item2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_myplaces"
+            fab:fab_label="밴드 글쓰기"
+            fab:fab_size="mini" />
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
