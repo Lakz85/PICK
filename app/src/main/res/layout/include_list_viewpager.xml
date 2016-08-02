@@ -37,14 +37,14 @@
                 android:id="@+id/view_video_list"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:background="@drawable/ic_view_agenda_black_24dp"
+                android:background="@drawable/mov_btn"
                 android:onClick="viewVideo" />
 
             <Button
                 android:id="@+id/view_block_list"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:background="@drawable/ic_view_list_black_24dp"
+                android:background="@drawable/list_btn"
                 android:onClick="viewList" />
 
         </LinearLayout>
@@ -86,10 +86,10 @@
         fab:menu_animationDelayPerItem="55"
         fab:menu_backgroundColor="@android:color/transparent"
         fab:menu_buttonSpacing="0dp"
-        fab:menu_colorNormal="#da3c2f"
-        fab:menu_colorPressed="#dc4b3f"
-        fab:menu_colorRipple="#99d4d4d4"
-        fab:menu_icon="@drawable/fab_add">
+        fab:menu_colorNormal="#00ff0000"
+        fab:menu_colorPressed="#00ff0000"
+        fab:menu_colorRipple="#00ff0000"
+        fab:menu_icon="@drawable/wri_btn">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/material_design_floating_action_menu_item1"

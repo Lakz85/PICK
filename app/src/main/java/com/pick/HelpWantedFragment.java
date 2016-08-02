@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,9 +20,10 @@ import java.util.ArrayList;
  */
 public class HelpWantedFragment extends android.support.v4.app.Fragment {
     public static int increment;
-    static MainActivity owner;
-    static Bundle bundle;
-    static int type=0;
+    private static MainActivity owner;
+    private static Bundle bundle;
+    private static int type=0;
+    private static boolean isPress = false;
 
     public HelpWantedFragment() {
     }
@@ -86,6 +88,7 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
             public final TextView mBandName;
             public final TextView mPart;
             public final TextView mLocation;
+            public final ImageButton mBookMark;
 
             public ViewHolder(View view) {
                 super(view);
@@ -95,7 +98,24 @@ public class HelpWantedFragment extends android.support.v4.app.Fragment {
                 mBandName = (TextView) view.findViewById(R.id.item_band_name);
                 mPart = (TextView) view.findViewById(R.id.item_part);
                 mLocation = (TextView) view.findViewById(R.id.item_location);
+                mBookMark = (ImageButton) view.findViewById(R.id.book_mark_icon);
+                mBookMark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(isPress){
+                            mBookMark.setBackgroundResource(R.drawable.fav_select_btn);
+                            isPress = false;
+                        }
+
+                        else {
+                            mBookMark.setBackgroundResource(R.drawable.star_fav_btn);
+                            isPress = true;
+                        }
+                    }
+                });
             }
+
+
 
 
         }

@@ -38,4 +38,9 @@ dependencies {
     compile 'org.adw.library:discrete-seekbar:1.0.1'
     compile 'com.github.clans:fab:1.6.2'
     compile files('libs/libDaumMapAndroid.jar')
+
+
+    compile 'com.navercorp.volleyextensions:volleyer:2.0.+'
+    compile 'com.mcxiaoke.volley:library:1.0.+'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.+'
 }

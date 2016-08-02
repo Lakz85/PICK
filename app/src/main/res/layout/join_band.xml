@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#e9e9e9">
+    android:background="@drawable/join_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/edge"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
@@ -33,7 +33,8 @@
                 android:textSize="20dp"
                 android:gravity="center"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="30dp" />
+                android:layout_marginRight="30dp"
+                android:textColor="#fff" />
 
             <EditText
                 android:id="@+id/bandNameEdit"
@@ -57,7 +58,8 @@
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="30dp" />
+                android:layout_marginRight="30dp"
+                android:textColor="#fff" />
 
             <Switch
                 android:id="@+id/sexSwitch"
@@ -80,7 +82,8 @@
                 android:text="연령대 "
                 android:textSize="20sp"
                 android:gravity="center"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:textColor="#fff" />
 
             <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -107,7 +110,8 @@
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="30dp" />
+                android:layout_marginRight="30dp"
+                android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/genreSpinner"
@@ -131,7 +135,8 @@
                 android:text="지역"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="30dp" />
+                android:layout_marginRight="30dp"
+                android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/citySpinner"
@@ -163,7 +168,8 @@
                 android:text="모집파트"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="30dp" />
+                android:layout_marginRight="30dp"
+                android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/partSpinner"

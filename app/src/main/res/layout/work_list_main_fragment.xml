@@ -136,15 +136,17 @@
 
             </LinearLayout>
 
-            <com.github.ivbaranov.mfb.MaterialFavoriteButton
+            <ImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center|right"
                 android:padding="0dp"
+                android:background="@drawable/fav_select_btn"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/book_mark_button" />
+                android:id="@+id/book_mark_icon"
+                android:clickable="true" />
 
         </RelativeLayout>
 

@@ -12,7 +12,15 @@ import android.transition.Transition;
 import android.view.Menu;
 import android.view.Window;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.github.clans.fab.FloatingActionMenu;
+import com.navercorp.volleyextensions.volleyer.Volleyer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by 10 on 2016-07-19.
@@ -24,7 +32,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     ItemDetailAdapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_detail_layout);
 
@@ -34,8 +42,8 @@ public class ItemDetailActivity extends AppCompatActivity {
         final String mPart = i.getStringExtra("Part");
         final String mLocation = i.getStringExtra("Location");
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Window window  = getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
             Transition exitTrans = new Explode();
 
             Transition reenterTrans = new Explode();
@@ -48,11 +56,10 @@ public class ItemDetailActivity extends AppCompatActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(R.drawable.appli_btn);
 
         //memberImage.setImageResource(imageResValue);
 
-        pager = (ViewPager)findViewById(R.id.viewpager);
+        pager = (ViewPager) findViewById(R.id.viewpager);
         //mAdapter = new MyPagerAdapter(this);
         mAdapter = new ItemDetailAdapter(getSupportFragmentManager());
 
@@ -74,10 +81,12 @@ public class ItemDetailActivity extends AppCompatActivity {
             }
         });
         initData();
+        callJackson();
         fab = (FloatingActionMenu) findViewById(R.id.fab);
 
 
     }
+
     private void initData() {
         for (int i = 0; i < 2; i++) {
             mAdapter.add("item " + i);
@@ -90,8 +99,40 @@ public class ItemDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    private Response.Listener<PersonItem> listener = new Response.Listener<PersonItem>() {
+        @Override
+        public void onResponse(PersonItem personItem) {
+            for (DataItem item : personItem.datas) {
+                System.out.println(item.personId + ", " + item.personType + "***\n");
+            }
+        }
+    };
 
 
-}
+    private void callJackson() {
+        Volleyer.volleyer().get("http://52.78.95.102:3000/persons")
+                .withTargetClass(PersonItem.class)
+                .withListener(listener)
+                .execute();
+    }
+
+
+    private Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+
+            try {
+                String responseBody = new String(error.networkResponse.data, "utf-8");
+                JSONObject jsonObject = new JSONObject(responseBody);
+            } catch (JSONException e) {
+                //Handle a malformed json response
+            } catch (UnsupportedEncodingException er) {
+
+            }
+        }
+    };
+};
+
+
 
 
