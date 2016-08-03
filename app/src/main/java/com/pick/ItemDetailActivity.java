@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
 
@@ -16,11 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.clans.fab.FloatingActionMenu;
 import com.navercorp.volleyextensions.volleyer.Volleyer;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by 10 on 2016-07-19.
@@ -80,17 +76,9 @@ public class ItemDetailActivity extends AppCompatActivity {
 
             }
         });
-        initData();
+
         callJackson();
         fab = (FloatingActionMenu) findViewById(R.id.fab);
-
-
-    }
-
-    private void initData() {
-        for (int i = 0; i < 2; i++) {
-            mAdapter.add("item " + i);
-        }
     }
 
 
@@ -99,39 +87,35 @@ public class ItemDetailActivity extends AppCompatActivity {
         return true;
     }
 
-    private Response.Listener<PersonItem> listener = new Response.Listener<PersonItem>() {
-        @Override
-        public void onResponse(PersonItem personItem) {
-            for (DataItem item : personItem.datas) {
-                System.out.println(item.personId + ", " + item.personType + "***\n");
-            }
-        }
-    };
-
 
     private void callJackson() {
         Volleyer.volleyer().get("http://52.78.95.102:3000/persons")
                 .withTargetClass(PersonItem.class)
                 .withListener(listener)
+                .withErrorListener(errorListener)
                 .execute();
     }
+
+    private Response.Listener<PersonItem> listener = new Response.Listener<PersonItem>() {
+        @Override
+        public void onResponse(PersonItem personItem) {
+            int i = 0 ;
+            for (DataItem data : personItem.datas) {
+                Log.e("d", data.personPart.toString() + ", " + data.personId + "***\n");
+                mAdapter.add("item " + i);
+                i++;
+            }
+        }
+    };
 
 
     private Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-
-            try {
-                String responseBody = new String(error.networkResponse.data, "utf-8");
-                JSONObject jsonObject = new JSONObject(responseBody);
-            } catch (JSONException e) {
-                //Handle a malformed json response
-            } catch (UnsupportedEncodingException er) {
-
-            }
+            Log.e("e", error.getLocalizedMessage());
         }
     };
-};
+}
 
 
 

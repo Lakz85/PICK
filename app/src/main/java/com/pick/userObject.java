@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class userObject {
 
-    @JsonProperty("_id")
-    public String userId;
     @JsonProperty("name")
     public String name;
 

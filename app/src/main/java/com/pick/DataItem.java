@@ -16,7 +16,7 @@ public class DataItem {
     @JsonProperty("type")
     public String personType;
     @JsonProperty("part")
-    public ArrayList<String>[] personPart;
+    public String[] personPart;
     @JsonProperty("v_url")
     public String personVideoURL;
     @JsonProperty("userObject")

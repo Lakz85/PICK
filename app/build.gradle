@@ -37,7 +37,6 @@ dependencies {
     //버튼 애니메이션
     compile 'org.adw.library:discrete-seekbar:1.0.1'
     compile 'com.github.clans:fab:1.6.2'
-    compile files('libs/libDaumMapAndroid.jar')
 
 
     compile 'com.navercorp.volleyextensions:volleyer:2.0.+'
