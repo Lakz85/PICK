@@ -14,16 +14,19 @@ import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class ItemDetailFragment1 extends Fragment {
+public class DetailProfileFragment extends Fragment {
     String message;
     private int mScrollOffset = 4;
     private int mMaxProgress = 100;
     private LinkedList<ProgressType> mProgressTypes;
     private Handler mUiHandler = new Handler();
+    private static Bundle b;
 
+    static ArrayList receiveServerData;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,16 +34,17 @@ public class ItemDetailFragment1 extends Fragment {
 
     }
 
-    public ItemDetailFragment1() {
+    public DetailProfileFragment() {
         // Required empty public constructor
 
     }
 
     //팩토리 패턴
-    public static ItemDetailFragment1 newInstance(String message) {
-        Bundle b = new Bundle();
-        b.putString("message", message);
-        ItemDetailFragment1 f = new ItemDetailFragment1();
+    public static DetailProfileFragment newInstance(String count, ArrayList receiveServerData) {
+        b = new Bundle();
+        b.putString("receive", count);
+        DetailProfileFragment.receiveServerData = receiveServerData;
+        DetailProfileFragment f = new DetailProfileFragment();
         f.setArguments(b);
         return f;
     }
@@ -49,7 +53,7 @@ public class ItemDetailFragment1 extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            message = getArguments().getString("message");
+            message = getArguments().getString("argument가 넘어오지 않았다.");
         }
 
     }
@@ -64,6 +68,7 @@ public class ItemDetailFragment1 extends Fragment {
             mProgressTypes.offer(type);
 
         }
+
 
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setMax(mMaxProgress);

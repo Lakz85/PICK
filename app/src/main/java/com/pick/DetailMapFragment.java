@@ -13,7 +13,7 @@ import net.daum.mf.map.api.MapView;
 /**
  * Created by 10 on 2016-07-28.
  */
-public class ItemDetailFragment2 extends Fragment {
+public class DetailMapFragment extends Fragment {
     RelativeLayout mapContainer;
     MapView mapView;
 
@@ -30,14 +30,14 @@ public class ItemDetailFragment2 extends Fragment {
     }
 
 
-    public ItemDetailFragment2() {
+    public DetailMapFragment() {
         // Required empty public constructor
     }
     //팩토리 패턴
-    public static ItemDetailFragment2 newInstance(String message) {
+    public static DetailMapFragment newInstance(String message) {
         Bundle b = new Bundle();
         b.putString("message", message);
-        ItemDetailFragment2 f = new ItemDetailFragment2();
+        DetailMapFragment f = new DetailMapFragment();
         f.setArguments(b);
         return f;
     }

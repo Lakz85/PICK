@@ -26,29 +26,6 @@
             app:tabMinWidth="90dp"
             app:tabMode="fixed" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:gravity="center_vertical|right|center_horizontal"
-            android:padding="5dp">
-
-            <Button
-                android:id="@+id/view_video_list"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="@drawable/mov_btn"
-                android:onClick="viewVideo" />
-
-            <Button
-                android:id="@+id/view_block_list"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="@drawable/list_btn"
-                android:onClick="viewList" />
-
-        </LinearLayout>
-
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

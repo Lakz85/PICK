@@ -1,8 +1,7 @@
 package com.pick;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,36 +17,48 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.navercorp.volleyextensions.volleyer.Volleyer;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
+    private static int checkConnectedServer = 0; // 0: before connection  , 1: connection succeeded
+
     private final long FINSH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
     private static ViewPager pager;
-
+    Vector<ArrayList> container = new Vector();
 
     FloatingActionMenu fabMenu;
-    FloatingActionButton minifab1;
-    FloatingActionButton minifab2;
+    FloatingActionButton intentIndividualFabButton;
+    FloatingActionButton intentBandFabButton;
 
-
-    private Button listViewButton, videoViewButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // modify
+        startActivity(new Intent(this, SplashActivity.class));
+        ExampleTask exampleTask = new ExampleTask();
+        exampleTask.execute();
+        //callJackson();
+        // end
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,17 +66,28 @@ public class MainActivity extends AppCompatActivity {
         ab.setHomeAsUpIndicator(R.drawable.ham_btn);
         ab.setDisplayHomeAsUpEnabled(true);
 
-        listViewButton = (Button) findViewById(R.id.view_block_list);
-        videoViewButton = (Button) findViewById(R.id.view_video_list);
-
         //Floating Action Buttons
         fabMenu = (FloatingActionMenu) findViewById(R.id.fab);
-        minifab1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
-        minifab2 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
+        intentIndividualFabButton = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
+        intentBandFabButton = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
 
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        intentIndividualFabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,WriteIndividualActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        intentBandFabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,WriteBandActivity.class);
+                startActivity(intent);
+            }
+        });
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,20 +101,14 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.apply_list:
-                        intent = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(intent);
                         break;
                     case R.id.bookmark_list:
-                        intent = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(intent);
                         break;
                     case R.id.messagebox:
                         intent = new Intent(MainActivity.this,MessageListActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.setting:
-                        intent = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(intent);
                         break;
                 }
 
@@ -100,54 +116,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //탭에 필요한 뷰 페이지가 없을 경우 설정
-        ViewPager mainViewPager = (ViewPager)findViewById(R.id.viewpager);
-        if(mainViewPager != null) {
-            setupTabViewPager(mainViewPager);
-        }
-
-        /*//구인 , 구직 추가 플로팅 버튼
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (FAB_Status == false) {
-                    //Display FAB menu
-                    expandFAB();
-                    FAB_Status = true;
-                } else {
-                    //Close FAB menu
-                    hideFAB();
-                    FAB_Status = false;
-                }
-            }
-        });*/
-
-        minifab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,WriteIndividualActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        minifab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,WriteBandActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mainViewPager);
-
         // 롤리팝 이상부터 애니메이션 적용
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             Transition exitTrans = new Explode();
-
             Transition reenterTrans = new Explode();
 
             window.setExitTransition(exitTrans);
@@ -157,44 +129,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    Bitmap image = null;
-    Bitmap image2 = null;
+    private void setTab() {
+        //탭에 필요한 뷰 페이지가 없을 경우 설정
+        ViewPager mainViewPager = (ViewPager)findViewById(R.id.viewpager);
+        if(mainViewPager != null) {
+            setupTabViewPager(mainViewPager);
+        }
+
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mainViewPager);
+    }
 
     //탭 몇개 필요한지 설정하는 부분
-    private void setupTabViewPager(ViewPager pager){
-        image = BitmapFactory.decodeResource(getResources(), R.drawable.ic_perm_identity_black_24dp);
-        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_perm_identity_black_24dp);
-
+    private void setupTabViewPager(ViewPager pager) {
         PagerAdapter tabAdapter = new PagerAdapter(getSupportFragmentManager());
-        tabAdapter.appendFragment(
-                HelpWantedFragment.newInstance(0), "구인", image); // 처음설정은 동영상보기로 하기위해 0으로 설정
-        tabAdapter.appendFragment(
-                ApplicantFragment.newInstance(0),"구직", image2); // 처음설정은 동영상보기로 하기위해 0으로 설정
+        tabAdapter.appendFragment(MainFragment.newInstance(1), "구인");
+        tabAdapter.appendFragment(MainFragment.newInstance(1), "구직");
         pager.setAdapter(tabAdapter);
-        this.pager = pager;
     }
 
     //탭 바 설정
     private static class PagerAdapter extends FragmentPagerAdapter {
 
-        private final ArrayList<Fragment> tabFragment =
-                new ArrayList<Fragment>();
-        private final ArrayList<String> tabTitles  = new ArrayList<String>();
-        private final ArrayList<Bitmap> tabIcon = new ArrayList<Bitmap>();
-
-//        private static int[] ICONS = new int[] {
-//                R.drawable.ic_perm_identity_black_24dp,
-//                R.drawable.ic_record_voice_over_black_24dp
-//        };
-
+        private final ArrayList<Fragment> tabFragment = new ArrayList();
+        private final ArrayList<String> tabTitles  = new ArrayList();
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void appendFragment(Fragment fragment , String title , Bitmap icon){
+        public void appendFragment(Fragment fragment , String title){
             tabFragment.add(fragment);
             tabTitles.add(title);
-            tabIcon.add(icon);
         }
 
         public android.support.v4.app.Fragment getItem(int position){
@@ -206,16 +171,11 @@ public class MainActivity extends AppCompatActivity {
             return tabFragment.size();
         }
 
-//        public int getDrawableId(int position) {
-//            return ICONS[position];
-//        }
-
         @Override
         public CharSequence getPageTitle(int position) {
 
             return tabTitles.get(position);
         }
-
     }
 
     // 네비게이션 처음 설정
@@ -247,66 +207,85 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void viewVideo(View v){
-        if(v != videoViewButton) return;
-        PagerAdapter tabAdapter = new PagerAdapter(getSupportFragmentManager());
-        tabAdapter.appendFragment(
-                HelpWantedFragment.newInstance(0), "구인", image);
-        tabAdapter.appendFragment(
-                ApplicantFragment.newInstance(0),"구직", image2);
-        pager.setAdapter(tabAdapter);
+    /*
+    private void callJackson() {
+        Volleyer.volleyer().get("http://52.78.95.102:3000/persons/")
+                .withTargetClass(DataItems.class)
+                .withListener(listener)
+                .withErrorListener(errorListener)
+                .execute();
     }
+    */
 
-    public void viewList(View v){
-        if(v != listViewButton) return;
-        PagerAdapter tabAdapter = new PagerAdapter(getSupportFragmentManager());
-        tabAdapter.appendFragment(
-                HelpWantedFragment.newInstance(1), "구인", image);
-        tabAdapter.appendFragment(
-                ApplicantFragment.newInstance(1),"구직", image2);
-        pager.setAdapter(tabAdapter);
+    ArrayList receiveServerData;
+    StringBuffer partString;
 
+
+    private Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e("e", error.getLocalizedMessage());
+        }
+    };
+
+
+    class ExampleTask extends AsyncTask<Void, Void, Void> {
+
+        // 설정한 제네릭들은 아래와 같습니다.
+        // Params : 비동기 작업시 필요한 input이 없어 Void로 설정
+        // Progress: 중간 결과를 보여줄 필요가 없어 Void로 설정
+        // Result: 비동기 작업 결과가 필요하지 않아 Void로 설정
+
+        public ExampleTask() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // 비동기 작업을 시작하기 전에 화면으로 알립니다.
+            return;
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            // 이 메소드에 실제로 처리할 일을 코드로 작성하세요.
+            MainActivity.checkConnectedServer = 0;
+
+            Response.Listener<DataItems> listener = new Response.Listener<DataItems>() {
+                @Override
+                public void onResponse(DataItems dataItems) {
+                    for (DataItem data : dataItems.datas) {
+                        receiveServerData = new ArrayList();
+                        partString = new StringBuffer("");
+                        receiveServerData.add(0,data.personId);
+                        receiveServerData.add(1,data.personName.get(0));
+                        receiveServerData.add(2,data.personType);
+                        receiveServerData.add(3,data.personVideoURL);
+                        for(String part : data.personPart ){
+                            partString.append(part+", ");
+                        }
+                        receiveServerData.add(4,partString.toString());
+                        container.add(receiveServerData);
+                    }
+                    MainFragment.setReceiveServerData(container);
+                    MainActivity.checkConnectedServer = 1;
+                }
+            };
+
+            Volleyer.volleyer().get("http://52.78.95.102:3000/persons/")
+                    .withTargetClass(DataItems.class)
+                    .withListener(listener)
+                    .withErrorListener(errorListener)
+                    .execute();
+
+            while (MainActivity.checkConnectedServer == 0);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // 비동기 작업이 끝난 후 화면으로 알립니다.
+            setTab();
+            return;
+        }
     }
-
-
-   /* public void expandFAB() {
-
-        //Floating Action Button 1
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.rightMargin += (int) (fab1.getWidth() * 1);
-        layoutParams.bottomMargin += (int) (fab1.getHeight() * 0.25);
-        minifab1.setLayoutParams(layoutParams);
-        minifab1.startAnimation(show_fab_1);
-        minifab1.setClickable(true);
-
-        //Floating Action Button 2
-        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.rightMargin += (int) (fab2.getWidth() * 0.25);
-        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 0.75);
-        fab2.setLayoutParams(layoutParams2);
-        fab2.startAnimation(show_fab_2);
-        fab2.setClickable(true);
-    }
-
-
-    public void hideFAB() {
-
-        //Floating Action Button 1
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.rightMargin -= (int) (fab1.getWidth() * 1);
-        layoutParams.bottomMargin -= (int) (fab1.getHeight() * 0.25);
-        fab1.setLayoutParams(layoutParams);
-        fab1.startAnimation(hide_fab_1);
-        fab1.setClickable(false);
-
-        //Floating Action Button 2
-        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.rightMargin -= (int) (fab2.getWidth() * 0.25);
-        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 0.75);
-        fab2.setLayoutParams(layoutParams2);
-        fab2.startAnimation(hide_fab_2);
-        fab2.setClickable(false);
-    }
-*/
-
 }

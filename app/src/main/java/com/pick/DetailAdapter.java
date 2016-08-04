@@ -7,15 +7,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 
 
-public class ItemDetailAdapter extends FragmentPagerAdapter {
-    ArrayList<String> items = new ArrayList<String>();
+public class DetailAdapter extends FragmentPagerAdapter {
+    ArrayList<String> items = new ArrayList();
+    ArrayList receiveServerData;
 
-    public void add(String item) {
-        items.add(item);
+    public void add(String count, ArrayList receiveServerData) {
+        items.add(count);
+        this.receiveServerData = receiveServerData;
         notifyDataSetChanged();
     }
 
-    public ItemDetailAdapter(FragmentManager fm) {
+    public DetailAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -23,9 +25,9 @@ public class ItemDetailAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ItemDetailFragment1.newInstance(items.get(position));//정적 메소드로 newInstance 생성해주는 것이 좋음
+                return DetailProfileFragment.newInstance(items.get(position),receiveServerData);//정적 메소드로 newInstance 생성해주는 것이 좋음
             case 1:
-                return ItemDetailFragment2.newInstance(items.get(position));
+                //return DetailMapFragment.newInstance(items.get(position), receiveServerData);
         }
         return null;
     }

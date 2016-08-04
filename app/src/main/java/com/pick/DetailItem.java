@@ -10,15 +10,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataItem {
+public class DetailItem {
     @JsonProperty("_id")
-    public String personId;
+    public String id;
     @JsonProperty("type")
-    public int personType;
+    public int type;
+    @JsonProperty("genre")
+    public String[] genre;
     @JsonProperty("part")
-    public String[] personPart;
+    public String[] part;
+    @JsonProperty("cont")
+    public String content;
     @JsonProperty("v_key")
-    public String personVideoURL;
+    public String videoURL;
+    @JsonProperty("u_id")
+    public String userId;
     @JsonProperty("userObject")
-    public ArrayList<userObject> personName;
+    public ArrayList<detailUserObject> detailObject;
 }

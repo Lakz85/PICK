@@ -28,6 +28,8 @@
         <activity android:name=".WriteBandActivity"/>
         <activity android:name=".WriteIndividualActivity"/>
         <activity android:name=".MessageListActivity"/>
+        <activity android:name=".SplashActivity"/>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET">

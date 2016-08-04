@@ -18,6 +18,9 @@ import com.android.volley.VolleyError;
 import com.github.clans.fab.FloatingActionMenu;
 import com.navercorp.volleyextensions.volleyer.Volleyer;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
 /**
  * Created by 10 on 2016-07-19.
  */
@@ -25,7 +28,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     ViewPager pager;
     FloatingActionMenu fab;
-    ItemDetailAdapter mAdapter;
+    DetailAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         pager = (ViewPager) findViewById(R.id.viewpager);
         //mAdapter = new MyPagerAdapter(this);
-        mAdapter = new ItemDetailAdapter(getSupportFragmentManager());
+        mAdapter = new DetailAdapter(getSupportFragmentManager());
 
         pager.setAdapter(mAdapter);
 
@@ -90,21 +93,43 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     private void callJackson() {
         Volleyer.volleyer().get("http://52.78.95.102:3000/persons")
-                .withTargetClass(PersonItem.class)
+                .withTargetClass(DetailItems.class)
                 .withListener(listener)
                 .withErrorListener(errorListener)
                 .execute();
     }
 
-    private Response.Listener<PersonItem> listener = new Response.Listener<PersonItem>() {
+    ArrayList receiveServerData;
+    Vector<String> partArray;
+    Vector<String> genreArray;
+    private Response.Listener<DetailItems> listener = new Response.Listener<DetailItems>() {
         @Override
-        public void onResponse(PersonItem personItem) {
-            int i = 0 ;
-            for (DataItem data : personItem.datas) {
-                Log.e("d", data.personPart.toString() + ", " + data.personId + "***\n");
-                mAdapter.add("item " + i);
-                i++;
+        public void onResponse(DetailItems detailItems) {
+            int itemCount = 0;
+            for (DetailItem data : detailItems.userDatas) {
+                receiveServerData = new ArrayList();
+                partArray = new Vector<String>();
+                genreArray = new Vector<String>();
+                receiveServerData.add(0, data.id);
+                receiveServerData.add(1, data.type);
+                for (String genre : data.genre) {
+                    genreArray.add(genre);
+                }
+                receiveServerData.add(2, genreArray);
+                for (String part : data.part) {
+                    partArray.add(part);
+                }
+                receiveServerData.add(3, partArray);
+                receiveServerData.add(4, data.content);
+                receiveServerData.add(5, data.videoURL);
+                receiveServerData.add(6, data.userId);
+                receiveServerData.add(7, data.detailObject.get(0));
+                receiveServerData.add(8, data.detailObject.get(1));
+                receiveServerData.add(9, data.detailObject.get(2));
+                receiveServerData.add(10, data.detailObject.get(3));
+                receiveServerData.add(11, data.detailObject.get(4));
             }
+            mAdapter.add("" + itemCount++, receiveServerData);
         }
     };
 
