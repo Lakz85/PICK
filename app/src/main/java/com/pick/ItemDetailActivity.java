@@ -18,8 +18,7 @@ import com.android.volley.VolleyError;
 import com.github.clans.fab.FloatingActionMenu;
 import com.navercorp.volleyextensions.volleyer.Volleyer;
 
-import java.util.ArrayList;
-import java.util.Vector;
+import java.util.HashMap;
 
 /**
  * Created by 10 on 2016-07-19.
@@ -29,17 +28,14 @@ public class ItemDetailActivity extends AppCompatActivity {
     ViewPager pager;
     FloatingActionMenu fab;
     DetailAdapter mAdapter;
-
+    private String id ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_detail_layout);
 
         Intent i = getIntent();
-        final String mType = i.getStringExtra("Type");
-        final String mBandName = i.getStringExtra("BandName");
-        final String mPart = i.getStringExtra("Part");
-        final String mLocation = i.getStringExtra("Location");
+        id = i.getStringExtra("ID");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -92,44 +88,46 @@ public class ItemDetailActivity extends AppCompatActivity {
 
 
     private void callJackson() {
-        Volleyer.volleyer().get("http://52.78.95.102:3000/persons")
+        Volleyer.volleyer().get("http://52.78.95.102:3000/persons/"+id)
                 .withTargetClass(DetailItems.class)
                 .withListener(listener)
                 .withErrorListener(errorListener)
                 .execute();
     }
 
-    ArrayList receiveServerData;
-    Vector<String> partArray;
-    Vector<String> genreArray;
+    HashMap<String , String> receiveServerData;
+    StringBuffer partArray;
+    StringBuffer genreArray;
     private Response.Listener<DetailItems> listener = new Response.Listener<DetailItems>() {
         @Override
         public void onResponse(DetailItems detailItems) {
             int itemCount = 0;
             for (DetailItem data : detailItems.userDatas) {
-                receiveServerData = new ArrayList();
-                partArray = new Vector<String>();
-                genreArray = new Vector<String>();
-                receiveServerData.add(0, data.id);
-                receiveServerData.add(1, data.type);
+                receiveServerData = new HashMap();
+                partArray = new StringBuffer();
+                genreArray = new StringBuffer();
+                receiveServerData.put("id", data.id);
+                receiveServerData.put("type", String.valueOf(data.type));
                 for (String genre : data.genre) {
-                    genreArray.add(genre);
+                    genreArray.append(genre);
                 }
-                receiveServerData.add(2, genreArray);
+                receiveServerData.put("genre", genreArray.toString());
                 for (String part : data.part) {
-                    partArray.add(part);
+                    partArray.append(part);
                 }
-                receiveServerData.add(3, partArray);
-                receiveServerData.add(4, data.content);
-                receiveServerData.add(5, data.videoURL);
-                receiveServerData.add(6, data.userId);
-                receiveServerData.add(7, data.detailObject.get(0));
-                receiveServerData.add(8, data.detailObject.get(1));
-                receiveServerData.add(9, data.detailObject.get(2));
-                receiveServerData.add(10, data.detailObject.get(3));
-                receiveServerData.add(11, data.detailObject.get(4));
+                receiveServerData.put("part", partArray.toString());
+                receiveServerData.put("content", data.content);
+                receiveServerData.put("videoUPL", data.videoURL);
+                receiveServerData.put("userId", data.userId);
+                receiveServerData.put("name", data.detailObject.get(0).userName);
+                receiveServerData.put("gender", data.detailObject.get(0).userGender);
+                receiveServerData.put("age", String.valueOf(data.detailObject.get(0).userAge));
+                receiveServerData.put("area_do", data.detailObject.get(0).area_first);
+                receiveServerData.put("area_gu", data.detailObject.get(0).area_gu);
+
             }
-            mAdapter.add("" + itemCount++, receiveServerData);
+            mAdapter.add(DetailProfileFragment.newInstance("" + itemCount++,receiveServerData));
+            mAdapter.add(DetailMapFragment.newInstance("" + itemCount++,receiveServerData));
         }
     };
 

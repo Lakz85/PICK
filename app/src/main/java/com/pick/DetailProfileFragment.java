@@ -11,26 +11,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Locale;
 
 public class DetailProfileFragment extends Fragment {
     String message;
-    private int mScrollOffset = 4;
     private int mMaxProgress = 100;
     private LinkedList<ProgressType> mProgressTypes;
     private Handler mUiHandler = new Handler();
     private static Bundle b;
+    static HashMap<String,String> serverData;
 
-    static ArrayList receiveServerData;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.item_detail_1, container, false);
+        return inflater.inflate(R.layout.item_detail_profile, container, false);
 
     }
 
@@ -40,10 +39,10 @@ public class DetailProfileFragment extends Fragment {
     }
 
     //팩토리 패턴
-    public static DetailProfileFragment newInstance(String count, ArrayList receiveServerData) {
+    public static DetailProfileFragment newInstance(String count, HashMap<String,String> receiveServerData) {
         b = new Bundle();
         b.putString("receive", count);
-        DetailProfileFragment.receiveServerData = receiveServerData;
+        serverData = receiveServerData;
         DetailProfileFragment f = new DetailProfileFragment();
         f.setArguments(b);
         return f;
@@ -62,15 +61,24 @@ public class DetailProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Locale[] availableLocales = Locale.getAvailableLocales();
+        //Locale[] availableLocales = Locale.getAvailableLocales();
         mProgressTypes = new LinkedList<>();
         for (ProgressType type : ProgressType.values()) {
             mProgressTypes.offer(type);
 
         }
 
-
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        final TextView ageTextView = (TextView) view.findViewById(R.id.age_text_view);
+        final TextView partTextView = (TextView) view.findViewById(R.id.part_text_view);
+        final TextView genreTextView = (TextView) view.findViewById(R.id.genre_text_view);
+        final TextView locationTextView = (TextView) view.findViewById(R.id.location_text_view);
+
+        ageTextView.setText(serverData.get("age"));
+        partTextView.setText(serverData.get("part"));
+        genreTextView.setText(serverData.get("genre"));
+        locationTextView.setText(serverData.get("area_do")+" "+ serverData.get("area_gu"));
+
         fab.setMax(mMaxProgress);
 
         fab.setOnClickListener(new View.OnClickListener() {

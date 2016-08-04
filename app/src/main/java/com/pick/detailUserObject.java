@@ -16,7 +16,7 @@ public class detailUserObject {
     @JsonProperty("age")
     public int userAge;
     @JsonProperty("area_do")
-    public int area_first;
+    public String area_first;
     @JsonProperty("area_gu")
-    public int area_gu;
+    public String area_gu;
 }

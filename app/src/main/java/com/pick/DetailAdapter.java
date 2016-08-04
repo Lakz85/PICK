@@ -5,15 +5,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class DetailAdapter extends FragmentPagerAdapter {
-    ArrayList<String> items = new ArrayList();
-    ArrayList receiveServerData;
+    ArrayList<Fragment> items = new ArrayList();
+    HashMap<String,String> receiveServerData;
 
-    public void add(String count, ArrayList receiveServerData) {
-        items.add(count);
-        this.receiveServerData = receiveServerData;
+    public void add(Fragment fragment) {
+        items.add(fragment);
         notifyDataSetChanged();
     }
 
@@ -23,13 +23,7 @@ public class DetailAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return DetailProfileFragment.newInstance(items.get(position),receiveServerData);//정적 메소드로 newInstance 생성해주는 것이 좋음
-            case 1:
-                //return DetailMapFragment.newInstance(items.get(position), receiveServerData);
-        }
-        return null;
+        return items.get(position);
     }
 
     @Override

@@ -117,7 +117,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="13sp"
-                            android:text="베이스" />
+                            android:text="베이스"
+                            android:nestedScrollingEnabled="false"
+                            android:id="@+id/part_text_view" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -138,7 +140,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="13sp"
-                            android:text="락" />
+                            android:text="락"
+                            android:id="@+id/genre_text_view" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -158,7 +161,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="13sp"
-                            android:text="서울 무엇무엇동" />
+                            android:text="서울 무엇무엇동"
+                            android:id="@+id/location_text_view" />
                     </LinearLayout>
                 </LinearLayout>
                 <!--  <TextView

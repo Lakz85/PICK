@@ -3,8 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:paddingLeft="4dp">
+    android:paddingLeft="4dp"
+    android:weightSum="1">
 
     <LinearLayout
         android:id="@+id/help_wanted_detail_map_linear_layout"
@@ -50,29 +50,75 @@
                 android:paddingLeft="14dp"
                 android:paddingTop="13dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:padding="0dp"
-                    android:text="구인파트 : 기타"
-                    android:textSize="12sp" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:padding="0dp"
-                    android:text="장르 : 락"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="0dp"
+                        android:text="구인파트"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/part_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="0dp"
+                        android:text=""
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:padding="0dp"
-                    android:text="팀 구성 : 기타 1 베이스 1 드럼 1 보컬 1"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="0dp"
+                        android:text="장르"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/genre_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="0dp"
+                        android:text=""
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="0dp"
+                        android:text="팀 구성"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/team_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="0dp"
+                        android:text=""
+                        android:textSize="12sp"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -84,7 +130,7 @@
                 android:paddingLeft="14dp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/content_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Large Text"

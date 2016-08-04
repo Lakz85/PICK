@@ -143,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
     //탭 몇개 필요한지 설정하는 부분
     private void setupTabViewPager(ViewPager pager) {
         PagerAdapter tabAdapter = new PagerAdapter(getSupportFragmentManager());
-        tabAdapter.appendFragment(MainFragment.newInstance(1), "구인");
-        tabAdapter.appendFragment(MainFragment.newInstance(1), "구직");
+        tabAdapter.appendFragment(IndividualFragment.newInstance(1), "구인");
+        tabAdapter.appendFragment(BandFragment.newInstance(1), "구직");
         pager.setAdapter(tabAdapter);
     }
 
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
+
 
             return tabTitles.get(position);
         }
@@ -266,7 +267,8 @@ public class MainActivity extends AppCompatActivity {
                         receiveServerData.add(4,partString.toString());
                         container.add(receiveServerData);
                     }
-                    MainFragment.setReceiveServerData(container);
+                    IndividualFragment.setReceiveServerData(container);
+                    BandFragment.setReceiveServerData(container);
                     MainActivity.checkConnectedServer = 1;
                 }
             };

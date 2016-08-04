@@ -22,23 +22,23 @@ import java.util.Vector;
 /**
  * Created by ccei on 2016-07-20.
  */
-public class MainFragment extends android.support.v4.app.Fragment {
+public class IndividualFragment extends android.support.v4.app.Fragment {
     public static int increment;
     private static MainActivity owner;
     private static Bundle bundle;
     private static int type = 0;
     private static boolean isPress = false;
-    static RecyclerViewAdapter rv = new RecyclerViewAdapter();
+    private RecyclerViewAdapter recyclerViewAdapter;
     static Vector<ArrayList> receiveServerData;
     private Button listViewButton, videoViewButton;
+    private RecyclerView rv;
 
-
-    public MainFragment(){
+    public IndividualFragment(){
 
     }
 
-    public static MainFragment newInstance(int initValue) {
-        MainFragment fragment = new MainFragment();
+    public static IndividualFragment newInstance(int initValue) {
+        IndividualFragment fragment = new IndividualFragment();
         bundle = new Bundle();
         bundle.putInt("value", initValue);
         fragment.setArguments(bundle);
@@ -51,7 +51,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
     public void setType(int changeType){
         type= changeType;
-        rv.notifyDataSetChanged();
+        recyclerViewAdapter = new RecyclerViewAdapter(PickApplication.getItemContext());
+        rv.setAdapter(recyclerViewAdapter);
     }
 
     @Nullable
@@ -60,16 +61,16 @@ public class MainFragment extends android.support.v4.app.Fragment {
         View v = inflater.inflate(R.layout.main_video_list, container, false);
         final LinearLayout inLayout = (LinearLayout) v.findViewById(R.id.main_video_list);
 
-        listViewButton = (Button) v.findViewById(R.id.view_block_list);
         videoViewButton = (Button) v.findViewById(R.id.view_video_list);
-        listViewButton.setOnClickListener(new View.OnClickListener() {
+        videoViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view != videoViewButton) return;
                 setType(0);
             }
         });
-        videoViewButton.setOnClickListener(new View.OnClickListener() {
+        listViewButton = (Button) v.findViewById(R.id.view_block_list);
+        listViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view != listViewButton) return;
@@ -77,13 +78,15 @@ public class MainFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        RecyclerView rv = (RecyclerView) v.findViewById(R.id.recyclerview);
+
+        rv = (RecyclerView) v.findViewById(R.id.recyclerview);
         ((ViewGroup)rv.getParent()).removeView(rv);
         Bundle initBundle = getArguments();
         increment += initBundle.getInt("value");
         owner = (MainActivity) getActivity();
         rv.setLayoutManager(new LinearLayoutManager(PickApplication.getItemContext()));
-        rv.setAdapter(new RecyclerViewAdapter(PickApplication.getItemContext()));
+        recyclerViewAdapter = new RecyclerViewAdapter(PickApplication.getItemContext());
+        rv.setAdapter(recyclerViewAdapter);
         inLayout.addView(rv);
         return v;
     }
@@ -154,28 +157,24 @@ public class MainFragment extends android.support.v4.app.Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             ArrayList serverData = receiveServerData.get(position);
             setData(holder,serverData);
-            /*
             switch (serverData.get(2).toString()) {
-                case "0":
-                    break;
-                case "구직":
-
-            }*/
+                case "0": setData(holder,serverData);return;
+                default:return;
+            }
         }
-        public void setData(ViewHolder holder, ArrayList serverData){
+        public void setData(ViewHolder holder, final ArrayList serverData){
 
             holder.mType.setText(serverData.get(2).toString());
             holder.mBandName.setText(serverData.get(1).toString());
             holder.mPart.setText(serverData.get(4).toString());
-            holder.mLocation.setText("대전시");
+            holder.mLocation.setText("서울시");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(PickApplication.getItemContext(), ItemDetailActivity.class);
                     //                    서버에서 상세보기 던져야 함
-
-
+                    intent.putExtra("ID",serverData.get(0).toString());
                     // ActiviyOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(owner, holder.girlsImage, ViewCompat.getTransitionName(holder.girlsImage));
                     //ActivityCompat.startActivity(owner, intent, options.toBundle());
                     ActivityCompat.startActivity(owner, intent, bundle);
