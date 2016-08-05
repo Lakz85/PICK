@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 장르 스피너 -->
+    <string-array name="sp_genre">
+        <item>팝</item>
+        <item>메탈</item>
+        <item>펑크</item>
+        <item>모던</item>
+        <item>종교</item>
+    </string-array>
+
+    <!-- 지원자 스피너 -->
+    <string-array name="candidate">
+        <item>보컬</item>
+        <item>기타</item>
+        <item>베이스</item>
+        <item>드럼</item>
+        <item>브라스</item>
+        <item>퍼커션</item>
+        <item>그외</item>
+    </string-array>
+
+    <!-- 도시 스피너 -->
+    <string-array name="city">
+        <item>서울</item>
+        <item>대전</item>
+        <item>광주</item>
+        <item>울산</item>
+        <item>대구</item>
+        <item>부산</item>
+        <item>제주</item>
+    </string-array>
+
+    <!-- 구 스피너 -->
+    <string-array name="gu">
+        <item>동구</item>
+        <item>중구</item>
+        <item>서구</item>
+        <item>유성구</item>
+        <item>신탄진</item>
+    </string-array>
+    
+    
+</resources>
